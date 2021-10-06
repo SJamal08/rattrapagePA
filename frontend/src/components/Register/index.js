@@ -1,49 +1,83 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form';
+import { Link } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux';
+import { signupUser, userSelector, clearState } from '../../features/user/userSlice';
+import { useHistory } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 import './index.css'
 
 function Register() {
 
-    const [nom, setNom] = useState('')
-    const [prenom, setPrenom] = useState('')
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
+    const dispatch = useDispatch();
+    const history = useHistory();
+    const { register, handleSubmit } = useForm();
 
-    const register = () => {
-        console.log("Register : nom:" + nom + " prenom:" + prenom + " email:" + email + " pa")
-    }
+    const { isFetching, isSuccess, isError, errorMessage } = useSelector(
+        userSelector
+    );
+    const onSubmit = (data) => {
+        dispatch(signupUser(data));
+    };
+
+    useEffect(() => {
+        return () => {
+            dispatch(clearState());
+        };
+    }, []);
+
+    useEffect(() => {
+        if (isSuccess) {
+            dispatch(clearState());
+            history.push('/');
+        }
+        if (isError) {
+            toast.error(errorMessage);
+            dispatch(clearState());
+        }
+    }, [isSuccess, isError]);
+
     return (
         <div className="register">
 
             <div className="register__container">
                 <h2>Register page</h2>
-                <form action="">
-                    <h5>Nom</h5>
+                <form
+                    onSubmit={handleSubmit(onSubmit)}
+                    method="POST">
+                    <label>
+                        <h5> Nom d'utilisateur </h5>
+                        <input
+                            {...register("username")}
+                        />
+                    </label>
+                    <label>
+                        <h5> E-mail </h5>
+
+                        <input
+                            {...register("email")}
+                            type="email"
+                        />
+                    </label>
+                    <label>
+                        <h5> Mot de passe </h5>
+                        <input
+                            {...register("password")}
+                            type="password"
+                        />
+                    </label>
                     <input
-                        value={nom}
-                        onChange={(e) => setNom(e.target.value)}
+                        type="submit"
+                        value="S'inscrire"
+                        className="register__registerButton"
                     />
-                    <h5>Prénom</h5>
-                    <input
-                        value={prenom}
-                        onChange={(e) => setPrenom(e.target.value)}
-                    />
-                    <h5>E-mail</h5>
-                    <input
-                        value={email}
-                        type="email"
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
-                    <h5>Mot de passe</h5>
-                    <input
-                        value={password}
-                        type="password"
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                    <button type="submit" onClick={register} className="register__registerButton">S'inscrire</button>
                 </form>
 
-                <button className="register__registerButton">Se connecter</button>
+                Ou <Link to="login">
+                    <button className="register__loginButton">Se connecter</button>
+                </Link>
+
             </div>
         </div>
     )
