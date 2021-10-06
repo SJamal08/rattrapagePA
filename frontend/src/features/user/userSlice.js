@@ -35,10 +35,44 @@ export const signupUser = createAsyncThunk(
     }
 )
 
+export const loginUser = createAsyncThunk(
+    "users/login",
+    async ({ email, password }, thunkAPI) => {
+        try {
+            const response = await fetch(
+                "http://localhost:8000/api/auth/login",
+                {
+                    method: "POST",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        email,
+                        password,
+                    }),
+                }
+            )
+            let data = await response.json()
+            console.log("response", data)
+            if (response.status === 200) {
+                localStorage.setItem("token", data.token)
+                return data
+            } else {
+                return thunkAPI.rejectWithValue(data)
+            }
+        } catch (e) {
+            console.log("Error", e.response.data)
+            thunkAPI.rejectWithValue(e.response.data)
+        }
+    }
+)
+
 
 export const userSlice = createSlice({
     name: "user",
     initialState: {
+        id: "",
         username: "",
         email: "",
         isFetching: false,
@@ -70,7 +104,24 @@ export const userSlice = createSlice({
             state.isFetching = false;
             state.isError = true;
             // state.errorMessage = payload.message;
-        }
+        },
+        [loginUser.fulfilled]: (state, { payload }) => {
+            //state.email = payload.email;
+            //state.username = payload.name;
+            state.id = payload._id
+            state.isFetching = false;
+            state.isSuccess = true;
+            return state;
+        },
+        [loginUser.rejected]: (state, { payload }) => {
+            console.log('payload', payload);
+            state.isFetching = false;
+            state.isError = true;
+            state.errorMessage = payload.error;
+        },
+        [loginUser.pending]: (state) => {
+            state.isFetching = true;
+        },
     },
 })
 
