@@ -1,14 +1,16 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom"
 import './App.css';
-import Login from './components/Login';
-import Register from './components/Register';
-import EditorPage from './components/Editor';
-import Profile from './components/Profile';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import EditorPage from './pages/Editor';
+import Profile from './pages/Profile';
+import Header from './components/Header';
 
 function App() {
   return (
     <div className="App">
+      <Header />
       <Router>
         <Switch>
           <Route component={Login} path="/login" />

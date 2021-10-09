@@ -34,7 +34,7 @@ function Login() {
         }
         if (isSuccess) {
             //dispatch(clearState());
-            history.push('/');
+            history.push('/profile');
         }
     }, [isError, isSuccess]);
 

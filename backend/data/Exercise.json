@@ -1,0 +1,20 @@
+[
+  {
+    "title": "Est-il croissant ?",
+    "enonce": "Ecrire une fonction qui renvoie retourne true si le tableau de Int est trié dans l'ordre croissant.",
+    "defaultCode": "#include <stdio.h> \n#include <stdlib.h> \nboolean estCroissant(int tab[]){\n}",
+    "isSucceed": false
+  },
+  {
+    "title": "Tri decroissant",
+    "enonce": "Ecrire une fonction qui trie un tableau de Int dans l'ordre décroissant.",
+    "defaultCode": "#include <stdio.h> \n#include <stdlib.h> \nvoid tri(int tab[]){\n}",
+    "isSucceed": false
+  },
+  {
+    "title": "Recherche d'un element dans un tableau",
+    "enonce": "Ecrire une fonction qui renvoie true si l'element c donné se trouve dans un tableau quelconque de Int. ",
+    "defaultCode": "#include <stdio.h> \n#include <stdlib.h> \nint triple(int element, int tab[]){\n}",
+    "isSucceed": false
+  }
+]
