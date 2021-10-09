@@ -43,3 +43,19 @@ exports.login = (req, res, next) => {
         })
         .catch(error => res.status(500).json({ error }));
 };
+
+exports.getUserFromToken = (req, res, next) => {
+    const token = req.headers.authorization.split(' ')[1];
+    const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
+    console.log("mon id>>>>", decodedToken.userId)
+    const userId = decodedToken.userId;
+    console.log("mon id>>>>", userId)
+    User.findOne({ _id: userId })
+        .then(user => {
+            console.log(user.username);
+            res.status(200).json(user);
+        }
+        )
+        .catch(error => res.status(404).json({ error }));
+
+}
