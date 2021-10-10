@@ -57,5 +57,14 @@ exports.getUserFromToken = (req, res, next) => {
         }
         )
         .catch(error => res.status(404).json({ error }));
+}
 
+exports.updateUser = (user, token) => {
+    const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
+    console.log("mon id>>>>", decodedToken.userId)
+    const userId = decodedToken.userId;
+
+    User.updateOne({ _id: userId }, { ...user, _id: userId })
+        .then(() => console.log("updated"))
+        .catch(() => console.log("update failed"))
 }

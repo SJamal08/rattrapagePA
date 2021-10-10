@@ -16,7 +16,7 @@ function App() {
           <Route component={Login} path="/login" />
           <Route component={Register} path="/signup" />
           <Route component={Profile} path="/profile" />
-          <Route component={EditorPage} path="/editor" />
+          <Route component={EditorPage} path="/editor/exercise/:id" />
         </Switch>
       </Router>
     </div>
