@@ -17,6 +17,9 @@ exports.compile = (req, res) => {
 
         if (data.err == false && data.output == '') {
             user.exercises[exoId].isSucceed = true
+        } else {
+            user.exercises[exoId].isSucceed = false
+
         }
         console.log("is succeed>>>>>>", user.exercises[exoId].isSucceed)
 

@@ -29,9 +29,9 @@ function Profile() {
 
     return (
         < div >
-            <h2>Profile page token: {token}</h2>
+            <h2>Profile page</h2>
 
-            <div className="list">
+            <div className="list d-inline-flex">
                 {user.exercises && user.exercises.map((exercise, index) => (
                     <ListBox exercise={exercise} index={index} />
                 ))}

@@ -63,24 +63,30 @@ function EditorPage() {
     }
     return (
         <div>
-            <h2>Editor page exercise {id}</h2>
-            <h2>Hello mister  {user.username}</h2>
+            <div className="d-inline-flex" style={{ alignItems: "flex-start" }}>
+                <div className="d-inline" style={{ alignItems: "flex-start" }}>
+                    <div className="card" style={{ alignItems: "baseline", height: "23rem", width: "32rem", backgroundColor: "rgba(117, 190, 218, 0.5)" }}>
+                        <div className="card-body">
+                            <h5 className="card-title">Exercice {id + 1}</h5>
+                            <h6 className="card-subtitle mb-2 text-muted">{user.exercises[id].title}</h6>
+                        </div>
+                    </div>
+                    <input type="text" style={{ height: "7.5rem", width: "32rem" }} disabled value={user.exercises[id].isSucceed} />
+                </div>
 
-            <div>
+                <div className="card d-inline-flex p-2" style={{ backgroundColor: "rgba(117, 190, 218, 0.0)" }}>
+                    <Editor
+                        height="70vh"
+                        width="120vh"
+                        theme="vs-dark"
+                        defaultLanguage="python"
+                        defaultValue={user.exercises && user.exercises[0].defaultCode}
+                        onChange={handleEditorChange}
+                    />
+                    <button onClick={runCode} style={{ height: "4rem", width: "10rem", alignItems: "center" }}> Run code</button>
+                </div>
 
             </div>
-
-            <Editor
-                height="70vh"
-                width="150vh"
-                theme="vs-dark"
-                defaultLanguage="python"
-                defaultValue={user.exercises && user.exercises[0].defaultCode}
-                onChange={handleEditorChange}
-            />
-
-            <button
-                onClick={runCode}> Run code</button>
         </div>
     )
 }
