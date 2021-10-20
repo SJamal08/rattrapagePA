@@ -42,18 +42,18 @@ function Register() {
         <div className="register">
 
             <div className="register__container">
-                <h2>Register page</h2>
+                <h2 className="text__page">Register page</h2>
                 <form
                     onSubmit={handleSubmit(onSubmit)}
                     method="POST">
                     <label>
-                        <h5> Nom d'utilisateur </h5>
+                        <h5 className="text__page"> Nom d'utilisateur </h5>
                         <input
                             {...register("username")}
                         />
                     </label>
                     <label>
-                        <h5> E-mail </h5>
+                        <h5 className="text__page"> E-mail </h5>
 
                         <input
                             {...register("email")}
@@ -61,7 +61,7 @@ function Register() {
                         />
                     </label>
                     <label>
-                        <h5> Mot de passe </h5>
+                        <h5 className="text__page"> Mot de passe </h5>
                         <input
                             {...register("password")}
                             type="password"
@@ -74,7 +74,9 @@ function Register() {
                     />
                 </form>
 
-                Ou <Link to="login">
+                <h6 className="text__page">Ou</h6>
+
+                 <Link to="login">
                     <button className="register__loginButton">Se connecter</button>
                 </Link>
 

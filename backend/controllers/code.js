@@ -10,18 +10,34 @@ exports.compile = (req, res) => {
     const exoId = req.body.id
     const code = user.exercises[exoId].defaultCode
     const input = ""
-
+    
     const changeIsSucceed = (data) => {
 
-        console.log("data in changeIsSucceed>>>", data)
+        // if (data.err == true) {
+            //     user.exercises[exoId].isSucceed = false
+            // } else {
+            //     user.exercises[exoId].isSucceed = true
 
-        if (data.err == false && data.output == '') {
-            user.exercises[exoId].isSucceed = true
-        } else {
-            user.exercises[exoId].isSucceed = false
+        // }
 
-        }
-        console.log("is succeed>>>>>>", user.exercises[exoId].isSucceed)
+        if (data.err == true)
+            {
+                user.exercises[exoId].isSucceed = false
+            }
+        else 
+            {
+                const output = data.output.split(/\r\n|\r|\n/)
+
+                let success = true
+                output.forEach(element => {
+                    if (element.startsWith("<FAILED::>")) {
+                        success= false
+                    }
+                });
+                user.exercises[exoId].isSucceed = success
+            }
+
+        
 
     }
 

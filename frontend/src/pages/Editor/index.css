@@ -1,0 +1,14 @@
+.editorBlock {
+    display: flex;
+    flex-direction: row;
+    background-color: #231F20;
+}
+
+.leftBlock {
+    display: flex;
+    flex-direction: column;
+}
+.rightBlock {
+    display: flex;
+    flex-direction: column;
+}

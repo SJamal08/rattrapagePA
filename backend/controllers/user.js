@@ -61,7 +61,6 @@ exports.getUserFromToken = (req, res, next) => {
 
 exports.updateUser = (user, token) => {
     const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
-    console.log("mon id>>>>", decodedToken.userId)
     const userId = decodedToken.userId;
 
     User.updateOne({ _id: userId }, { ...user, _id: userId })

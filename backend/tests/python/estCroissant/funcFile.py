@@ -1,7 +1,7 @@
-def est_croissant(int_array):
-    elementPrecedent=int_array[0]
-    for element in int_array:
+def est_croissant (L):
+    elementPrecedent=L[0]
+    for element in L:
         if elementPrecedent>element :
             return False
-        elementPrecedent=element
+        elementPrecedent=element   
     return True

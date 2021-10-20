@@ -4,8 +4,6 @@ import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
-
-
 import './index.css'
 import { clearState, loginUser, userSelector } from '../../features/user/userSlice';
 
@@ -42,13 +40,13 @@ function Login() {
     return (
         <div className="login">
             <div className="login__container">
-                <h2>Login page</h2>
+                <h2 style={{color:"white"}}>Login page</h2>
 
                 <form
                     onSubmit={handleSubmit(onSubmit)}
                     method="POST">
                     <label>
-                        <h5>E-mail</h5>
+                        <h5 style={{color:"white"}}>Email</h5>
                     </label>
                     <input
                         type="email"
@@ -56,7 +54,7 @@ function Login() {
                     />
 
                     <label>
-                        <h5>Mot de passe</h5>
+                        <h5 style={{color:"white"}}>Mot de passe</h5>
                     </label>
                     <input
                         type="password"
@@ -68,7 +66,9 @@ function Login() {
                         className="login__loginButton" />
                 </form>
 
-                Ou <Link to="register">
+                <h6 style={{color:"white"}}> ou</h6> 
+                
+                <Link to="register">
                     <button className="login__loginButton">S'inscrire</button>
                 </Link>
 
