@@ -1,8 +1,5 @@
-const fs = require('fs')
 const userCtrl = require('../controllers/user')
-//const path = require('path')
 const execute = require('../compile/compile')
-//const deleteFile = require('./deleteFile')
 
 exports.compile = (req, res) => {
     const user = req.body.user
@@ -31,9 +28,6 @@ exports.compile = (req, res) => {
 
     return execute.pythonExecute(code, input, exoId)
         .then(data => {
-            console.log("SUCCESSFULL PROMISE " + data)
-            console.log("SENDING " + data)
-            console.log("data>>>>", data)
             changeIsSucceed(data)
 
             res.json( {isSucceed : user.exercises[exoId].isSucceed , ...data})
