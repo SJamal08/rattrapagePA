@@ -8,26 +8,36 @@ const Comp = ({msg , color}) => {
                 {msg}
             </div>
 }
-const GetCorrectComponent = ({texte}) => {
-    console.log("Le texte est  " , texte)
+const GetCorrectComponent = ({tag , texte}) => {
+    console.log("Le tag est  " , tag)
 
-    if (texte.startsWith("<DESCRIBE::"))
-         return <Comp color={"green"} msg={"Your Ticker is Resolved Successfully"} />
+    if (tag.startsWith("<DESCRIBE::"))
+         return <Comp color={"white"} msg={texte} />
 
-    if (texte.startsWith("<FAILED::"))
-        return <Comp color={"red"} msg={"Your Ticker is pending"} />
+    if (tag.startsWith("<FAILED::"))
+        return <Comp color={"red"} msg={texte} />
 
-    if (texte.startsWith("<ERROR::"))   
-    return <Comp color={"yellow"} msg={"Your Ticker is Closed Successfully"} />
+    if (tag.startsWith("<ERROR::"))   
+    return <Comp color={"red"} msg={texte} />
 
-    return <Comp color={"white"} msg={"The Ticket Status is unknown. Check back later."} />
+    if (tag.startsWith("<IT::"))   
+    return <Comp color={"white"} msg={texte} />
+
+    if (tag.startsWith("<PASSED::"))   
+    return <Comp color={"green"} msg={texte} />
+
+    if (tag.startsWith("<COMPLETEDIN::"))   
+    return <div><Comp color={"blue"} msg={texte+"sec"} /></div>
+    
+
+    return <Comp color={"white"} msg={texte} />
 
 }
 
 
 function OutPut({output}) {
     if(!Array.isArray(output)) return <div style={{color:"white"}}>{output}</div>
-    return  output.map((element , index) => <GetCorrectComponent key={index} texte={element.split(">")[0]} />)
+    return  output.map((element , index) => <GetCorrectComponent key={index} tag={element.split(">")[0]} texte={element.split(">")[1]} />)
  }
 
 export default OutPut

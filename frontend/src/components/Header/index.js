@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom';
+import jwt_decode from "jwt-decode"
 
 
 function Header() {
@@ -22,27 +23,22 @@ function Header() {
     }
 
     useEffect(() => {
-        fetch("http://localhost:8000/api/auth/findOne",
-            {
-                method: "GET",
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                    'Authorization': `Bearer ${localStorage.getItem("token")}`
-                }
-            })
-            .then((response) => response.json())
-            .then((response) => {
-                setUsername(response.username);
-            });
-    }, [])
+        if(localStorage.getItem('token')){
+
+            const decodedToken = jwt_decode(localStorage.getItem('token'))
+            console.log("voici le decoded token >>>>", decodedToken)
+    
+            setUsername(decodedToken.username)
+        }
+
+    }, [username])
 
     return (
         <div>
             <nav className="navbar navbar-dark bg-dark justify-content-between">
                 <span className="navbar-brand mb-0 h1">Navbar</span>
 
-                {username !== "" ?
+                {username != "" ?
                     <div>
                         <span className="navbar-brand mb-0 h1">Bonjour {username}</span>
                         <button className="btn btn-outline-warning my-2 my-sm-0"

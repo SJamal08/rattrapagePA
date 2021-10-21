@@ -12,7 +12,6 @@ const pythonExecute = (data, input, exoId) => {
   }
   return new Promise((resolve, reject) => {
     console.warn("Exo id ", exoId)
-    // const exo = exercises.find((value) => value.id == exoId)
     const exo = exercises[exoId]
     const folderName = "./tests/python/" + exo.folderName
     const fileName = folderName + "/funcFile.py"

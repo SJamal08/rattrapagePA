@@ -13,11 +13,12 @@ function Home() {
                 history.push("/profile")
             }
         
-    })
+    },[])
 
     return (
-        <div className="home">
+        <div className="home" style= {{minHeight:"80vh"}}>
             <h2>Home page</h2>
+            
         </div>
     )
 }

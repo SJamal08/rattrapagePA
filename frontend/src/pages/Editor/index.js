@@ -1,22 +1,49 @@
 import React, { useEffect, useState } from 'react'
 import Editor from "@monaco-editor/react";
+import jwt_decode from 'jwt-decode';
 import { useParams } from 'react-router-dom';
 import { useHistory } from 'react-router';
-import Popup from 'reactjs-popup';
 import './index.css'
 import OutPut from '../../components/OutPut';
-
+import Modal from 'react-modal';
+import congrats from "../../assets/img/clapping-congrats.gif"
+import retry from "../../assets/img/try-again.gif"
 function EditorPage() {
+    const customStyles = {
+        content: {
+          top: '50%',
+          left: '50%',
+          right: 'auto',
+          bottom: 'auto',
+          marginRight: '-50%',
+          transform: 'translate(-50%, -50%)',
+          backgroundColor:'#231F20'
+        },
+      }
+
+    const [modalIsOpen, setIsOpen] = useState(false);
+
+    function openModal() {
+      setIsOpen(true);
+    }
+  
+    function afterOpenModal() {
+      // references are now sync'd and can be accessed.
+    }
+  
+    function closeModal() {
+      setIsOpen(false);
+    }
 
     const { id } = useParams();
 
-    const [user, setUser] = useState({})
+    const [user, setUser] = useState(jwt_decode(localStorage.getItem('token')))
 
-    const [currentCode, setCurrentCode] = useState("")
+    const [currentCode, setCurrentCode] = useState(user.exercises[id].defaultCode)
 
     const history= useHistory();
 
-    const [outPut, setOutPut] = useState("Ici s'affichera le temps d'éxécution de votre code")
+    const [outPut, setOutPut] = useState("Ici s'affichera les resultats de votre code")
 
     useEffect(() => {
         if(!localStorage.getItem("token"))
@@ -51,9 +78,7 @@ function EditorPage() {
     const runCode = () => {
 
         let newUser = user
-
         newUser.exercises[id].defaultCode = currentCode
-
         fetch("http://localhost:8000/api/code/submit",
             {
                 method: "POST",
@@ -74,18 +99,17 @@ function EditorPage() {
                 console.log("outputTable>>>>", tableOutput)
                 setOutPut(tableOutput)
             })
-
     }
 
     const handleEditorChange = (value, event) => {
         setCurrentCode(value)
     }
     return (
-        <div className="editorBlock">
+        <div className="editorBlock" style={{height: "100%"}}>
             <div className="leftBlock">
                 <div className="" style={{ alignItems: "flex-start" }}>
                     <div className="" style={{ alignItems: "flex-start" }}>
-                        <div className="card" style={{ alignItems: "baseline", height: "15rem", width: "32rem", backgroundColor: "darkgray" }}>
+                        <div className="card" style={{ alignItems: "baseline", height: "15rem", width: "32rem", backgroundColor: "#696969" }}>
                             {user.exercises &&
                             (<div className="card-body">
                                 <h5 className="card-title">Exercice {parseInt(id) + 1}</h5>
@@ -96,59 +120,51 @@ function EditorPage() {
                         </div>
                     </div>
                 </div>
-                <div> 
+                <div style={{overflowY:"scroll", height:" 200px"}}> 
                 <OutPut  output={outPut}/>
                 </div>    
             </div>
             <div className="rightBlock">
                 {user.exercises && (
                      <Editor
-                        height="70vh"
-                        width="200vh"
+                        height="80vh"
+                        width="130vh"
                         theme="vs-dark"
                         defaultLanguage="python"
                         defaultValue={user.exercises[id].defaultCode}
                         onChange={handleEditorChange}
                     />
                 )}
-                <button onClick={runCode} style={{ height: "4rem", width: "10rem", alignItems: "center" }}> Run code</button>
-            </div>
-
-            {/* <div className="d-inline-flex" style={{ alignItems: "flex-start" }}>
-                <div className="d-inline" style={{ alignItems: "flex-start" }}>
-                    <div className="card" style={{ alignItems: "baseline", height: "23rem", width: "32rem", backgroundColor: "rgba(117, 190, 218, 0.5)" }}>
-                        {user.exercises &&
-                        (<div className="card-body">
-                        <h5 className="card-title">Exercice {parseInt(id) + 1}</h5>
-                        <h6 className="card-subtitle mb-2 text-muted">{user.exercises[id].title}</h6>
-                    </div>)
-                    }
-                        
+                <button onClick={()=> {
+                    runCode();
+                    openModal();
+                    }} className="btn btn-outline-warning my-2 my-sm-0" style={{ height: "3rem", width: "10rem", alignItems: "center" }}> Run code</button>
+                <Modal
+                    isOpen={modalIsOpen}
+                    onAfterOpen={afterOpenModal}
+                    onRequestClose={closeModal}
+                    style={customStyles}
+                    contentLabel="Example Modal"
+                >
+                    
+                    <button onClick={closeModal} type="button" class="close btn btn-outline-warning" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <div>{user.exercises[id].isSucceed === true ?
+                    <div>
+                        <h2 style={{color:"green"}}>***** Félicitations *****</h2>
+                        <img src={congrats} alt="" style={{width:"200px", height:"200px", display:"flex", alignItems:"center"}}/>
+                    </div>:
+                    <div style={{display:"flex", alignItems:"center", flexDirection:"column"}}>
+                        <h2 style={{color:"red"}}> ***** OUPS ! Essaye encore *****</h2>
+                        <img src={retry} alt="" style={{width:"200px", height:"200px"}}/>
+                    </div>                }
                     </div>
-                     {
-                        user?.exercises &&
-                        (
-                            <input type="text" style={{ height: "7.5rem", width: "32rem" }} disabled value={outPut} />
-                        )
-                    }
-                </div>
-
-                <div className="card d-inline-flex p-2" style={{ backgroundColor: "rgba(117, 190, 218, 0.0)" }}>
-
-                {user.exercises && (
-                     <Editor
-                        height="70vh"
-                        width="120vh"
-                        theme="vs-dark"
-                        defaultLanguage="python"
-                        defaultValue={user.exercises[id].defaultCode}
-                        onChange={handleEditorChange}
-                    />
-                )}
-                    <button onClick={runCode} style={{ height: "4rem", width: "10rem", alignItems: "center" }}> Run code</button>
-                </div>
-
-            </div> */}
+                    <div style={{overflowY:"scroll", height:" 200px"}}> 
+                        <OutPut  output={outPut}/>
+                    </div>
+                </Modal>         
+            </div>
         </div>
     )
 }

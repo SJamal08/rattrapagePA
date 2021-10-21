@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router';
+import jwt_decode from 'jwt-decode'
 import ListBox from '../../components/ListBox';
 
 function Profile() {
 
-    const [user, setUser] = useState("")
+    const [user] = useState(jwt_decode(localStorage.getItem('token')))
 
     const history= useHistory();
 
@@ -14,23 +15,6 @@ function Profile() {
                 history.push("/login")
             }
     });
-
-    useEffect(() => {
-        fetch("http://localhost:8000/api/auth/findOne",
-            {
-                method: "GET",
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                    'Authorization': `Bearer ${localStorage.getItem("token")}`
-                }
-            })
-            .then((response) => response.json())
-            .then((response) => {
-                setUser(response);
-            });
-    }, [])
-
 
     return (
         <div className="container" style={{backgroundColor: "#231F20"}}>
