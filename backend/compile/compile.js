@@ -1,8 +1,7 @@
 const fs = require('fs')
 const { exec } = require('child_process');
 const path = require('path');
-//const saveFile = require('./saveFile')
-const exercises = require('../data/Exercise.json')
+const exercises = require('../data/Exercise.json');
 
 // Function for execuing python code
 const pythonExecute = (data, input, exoId) => {
@@ -49,7 +48,6 @@ const pythonExecute = (data, input, exoId) => {
             output: stdout
           })
         })
-
       })
       .catch(() => {
         console.log("ERROR SAVE FILE" + saveFileRes)
@@ -58,12 +56,23 @@ const pythonExecute = (data, input, exoId) => {
           output: "Internal Server Error!"
         }
         resolve(err)
-      })
-  })
+      }).finally(
+
+        deleteFile( "../tests/python/" + exo.folderName + "/funcFile.py")
+      )
+    }
+  )
 }
 
-
-
+const deleteFile = (filename) => {
+  fs.unlink(filename, function (err) {
+      if (err) {
+          console.log("SORRY NOT DELETED")
+      };
+      // if no error, file has been deleted successfully
+      console.log('File deleted!');
+  }); 
+}
 
 const saveFile = (name, data) => {
   return new Promise((resolve, reject) => {
@@ -80,6 +89,8 @@ const saveFile = (name, data) => {
     });
   })
 }
+
+
 
 
 

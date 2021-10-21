@@ -1,4 +1,3 @@
-//const router = require('express').Router()
 const fs = require('fs')
 const userCtrl = require('../controllers/user')
 //const path = require('path')
@@ -12,14 +11,6 @@ exports.compile = (req, res) => {
     const input = ""
     
     const changeIsSucceed = (data) => {
-
-        // if (data.err == true) {
-            //     user.exercises[exoId].isSucceed = false
-            // } else {
-            //     user.exercises[exoId].isSucceed = true
-
-        // }
-
         if (data.err == true)
             {
                 user.exercises[exoId].isSucceed = false
@@ -36,9 +27,6 @@ exports.compile = (req, res) => {
                 });
                 user.exercises[exoId].isSucceed = success
             }
-
-        
-
     }
 
     return execute.pythonExecute(code, input, exoId)
@@ -49,13 +37,11 @@ exports.compile = (req, res) => {
             changeIsSucceed(data)
 
             res.json(data)
-            // deleteFile(path.join(__dirname, '../../input.txt'))
             // deleteFile(path.join(__dirname, '../../test.py'))
             // deleteFile(path.join(__dirname, '../../a.exe'))
         })
         .catch(err => {
             console.log("ERROR PROMISE " + err)
-            // deleteFile(path.join(__dirname, '../../input.txt'))
             // deleteFile(path.join(__dirname, '../../test.py'))
             // deleteFile(path.join(__dirname, '../../a.exe'))
         })
@@ -64,33 +50,3 @@ exports.compile = (req, res) => {
         })
 
 }
-
-// router.post('/submit', (req, res) => {
-//     console.log(req.body)
-//     const code = req.body.code
-//     const input = req.body.input
-//     const exoId = req.body.exoId
-
-//     // const lang = req.body.lang
-
-//     return execute.pythonExecute(code, input, exoId)
-//         .then(data => {
-//             console.log("SUCCESSFULL PROMISE " + data)
-//             console.log("SENDING " + data)
-//             res.json(data)
-//             // deleteFile(path.join(__dirname, '../../input.txt'))
-//             // deleteFile(path.join(__dirname, '../../test.py'))
-//             // deleteFile(path.join(__dirname, '../../a.exe'))
-//         })
-//         .catch(err => {
-//             console.log("ERROR PROMISE " + err)
-//             // deleteFile(path.join(__dirname, '../../input.txt'))
-//             // deleteFile(path.join(__dirname, '../../test.py'))
-//             // deleteFile(path.join(__dirname, '../../a.exe'))
-//         })
-
-
-// })
-
-
-// module.exports = router
