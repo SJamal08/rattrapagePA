@@ -37,6 +37,8 @@ function EditorPage() {
 
     const { id } = useParams();
 
+    const [isSucceed, setIsSucceed] = useState(false)
+
     const [user, setUser] = useState(jwt_decode(localStorage.getItem('token')))
 
     const [currentCode, setCurrentCode] = useState(user.exercises[id].defaultCode)
@@ -94,10 +96,12 @@ function EditorPage() {
             }).then((res) => res.json())
             .then((res) => {
                 console.log("response compilation>>>>", res)
+                if(res.err) return alert("Vous avez oublié la signature de la fonction")
                 const output= res.output
                 const tableOutput = output.split(/\r\n|\r|\n/)
-                console.log("outputTable>>>>", tableOutput)
                 setOutPut(tableOutput)
+                setIsSucceed(res.isSucceed)
+                openModal();
             })
     }
 
@@ -137,7 +141,6 @@ function EditorPage() {
                 )}
                 <button onClick={()=> {
                     runCode();
-                    openModal();
                     }} className="btn btn-outline-warning my-2 my-sm-0" style={{ height: "3rem", width: "10rem", alignItems: "center" }}> Run code</button>
                 <Modal
                     isOpen={modalIsOpen}
@@ -150,7 +153,7 @@ function EditorPage() {
                     <button onClick={closeModal} type="button" class="close btn btn-outline-warning" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                    <div>{user.exercises[id].isSucceed === true ?
+                    <div>{isSucceed ?
                     <div>
                         <h2 style={{color:"green"}}>***** Félicitations *****</h2>
                         <img src={congrats} alt="" style={{width:"200px", height:"200px", display:"flex", alignItems:"center"}}/>
@@ -158,7 +161,7 @@ function EditorPage() {
                     <div style={{display:"flex", alignItems:"center", flexDirection:"column"}}>
                         <h2 style={{color:"red"}}> ***** OUPS ! Essaye encore *****</h2>
                         <img src={retry} alt="" style={{width:"200px", height:"200px"}}/>
-                    </div>                }
+                    </div>}
                     </div>
                     <div style={{overflowY:"scroll", height:" 200px"}}> 
                         <OutPut  output={outPut}/>

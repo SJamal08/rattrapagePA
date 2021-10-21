@@ -36,14 +36,10 @@ exports.compile = (req, res) => {
             console.log("data>>>>", data)
             changeIsSucceed(data)
 
-            res.json(data)
-            // deleteFile(path.join(__dirname, '../../test.py'))
-            // deleteFile(path.join(__dirname, '../../a.exe'))
+            res.json( {isSucceed : user.exercises[exoId].isSucceed , ...data})
         })
         .catch(err => {
             console.log("ERROR PROMISE " + err)
-            // deleteFile(path.join(__dirname, '../../test.py'))
-            // deleteFile(path.join(__dirname, '../../a.exe'))
         })
         .finally(() => {
             userCtrl.updateUser(user, req.headers.authorization.split(' ')[1])

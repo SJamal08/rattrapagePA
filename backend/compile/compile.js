@@ -43,6 +43,7 @@ const pythonExecute = (data, input, exoId) => {
               error: stderr
             })
           }
+          deleteFile( "./tests/python/" + exo.folderName + "/funcFile.py")
           resolve({
             err: false,
             output: stdout
@@ -56,10 +57,7 @@ const pythonExecute = (data, input, exoId) => {
           output: "Internal Server Error!"
         }
         resolve(err)
-      }).finally(
-
-        deleteFile( "../tests/python/" + exo.folderName + "/funcFile.py")
-      )
+      })
     }
   )
 }
@@ -67,7 +65,7 @@ const pythonExecute = (data, input, exoId) => {
 const deleteFile = (filename) => {
   fs.unlink(filename, function (err) {
       if (err) {
-          console.log("SORRY NOT DELETED")
+          console.log("SORRY NOT DELETED", err)
       };
       // if no error, file has been deleted successfully
       console.log('File deleted!');
