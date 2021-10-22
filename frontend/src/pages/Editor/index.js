@@ -41,7 +41,7 @@ function EditorPage() {
 
     const [user, setUser] = useState(jwt_decode(localStorage.getItem('token')))
 
-    const [currentCode, setCurrentCode] = useState(user.exercises[id].defaultCode)
+    const [currentCode, setCurrentCode] = useState("")
 
     const history= useHistory();
 
@@ -57,7 +57,7 @@ function EditorPage() {
     },[])
 
     useEffect(() => {
-             fetch("http://localhost:8000/api/auth/findOne",
+             fetch(process.env.REACT_APP_BACKEND_URL+"/api/auth/findOne",
             {
                 method: "GET",
                 headers: {
@@ -81,7 +81,8 @@ function EditorPage() {
 
         let newUser = user
         newUser.exercises[id].defaultCode = currentCode
-        fetch("http://localhost:8000/api/code/submit",
+        console.log("code envoyé>>>>", newUser.exercises[id].defaultCode)
+        fetch(process.env.REACT_APP_BACKEND_URL+"/api/code/submit",
             {
                 method: "POST",
                 headers: {
@@ -106,6 +107,7 @@ function EditorPage() {
     }
 
     const handleEditorChange = (value, event) => {
+        console.log("new code>>>>", value)
         setCurrentCode(value)
     }
     return (

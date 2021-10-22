@@ -6,7 +6,7 @@ export const signupUser = createAsyncThunk(
     async ({ username, email, password }, thunkAPI) => {
         try {
             const response = await fetch(
-                "http://localhost:8000/api/auth/signup",
+                process.env.REACT_APP_BACKEND_URL+"/api/auth/signup",
                 {
                     method: "POST",
                     headers: {
@@ -40,7 +40,7 @@ export const loginUser = createAsyncThunk(
     async ({ email, password }, thunkAPI) => {
         try {
             const response = await fetch(
-                "http://localhost:8000/api/auth/login",
+                process.env.REACT_APP_BACKEND_URL+"/api/auth/login",
                 {
                     method: "POST",
                     headers: {
