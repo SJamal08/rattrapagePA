@@ -81,7 +81,6 @@ function EditorPage() {
 
         let newUser = user
         newUser.exercises[id].defaultCode = currentCode
-        console.log("code envoyé>>>>", newUser.exercises[id].defaultCode)
         fetch(process.env.REACT_APP_BACKEND_URL+"/api/code/submit",
             {
                 method: "POST",
@@ -96,7 +95,6 @@ function EditorPage() {
                 })
             }).then((res) => res.json())
             .then((res) => {
-                console.log("response compilation>>>>", res)
                 if(res.err) return alert("Vous avez oublié la signature de la fonction")
                 const output= res.output
                 const tableOutput = output.split(/\r\n|\r|\n/)
@@ -107,7 +105,6 @@ function EditorPage() {
     }
 
     const handleEditorChange = (value, event) => {
-        console.log("new code>>>>", value)
         setCurrentCode(value)
     }
     return (

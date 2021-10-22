@@ -27,7 +27,7 @@ const GetCorrectComponent = ({tag , texte}) => {
     return <Comp color={"green"} msg={texte} />
 
     if (tag.startsWith("<COMPLETEDIN::"))   
-    return <div><Comp color={"blue"} msg={texte+"sec"} /></div>
+    return <div><Comp color={"blue"} msg={texte+"ms"} /></div>
     
 
     return <Comp color={"white"} msg={texte} />

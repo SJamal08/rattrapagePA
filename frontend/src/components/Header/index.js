@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import jwt_decode from "jwt-decode"
+import logo from '../../assets/img/logo.jpg'
 
 
 function Header() {
@@ -36,8 +37,9 @@ function Header() {
     return (
         <div>
             <nav className="navbar navbar-dark bg-dark justify-content-between">
-                <span className="navbar-brand mb-0 h1">Navbar</span>
-
+            <Link to="/home">
+                <img src={logo} className="navbar-brand mb-0 h1" alt="" style={{height:"50px", width:"80px"}} />
+            </Link>
                 {username != "" ?
                     <div>
                         <span className="navbar-brand mb-0 h1">Bonjour {username}</span>
