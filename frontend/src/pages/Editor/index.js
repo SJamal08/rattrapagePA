@@ -41,6 +41,8 @@ function EditorPage() {
 
     const [user, setUser] = useState(jwt_decode(localStorage.getItem('token')))
 
+    const [language, setLanguage] = useState("javascript")
+
     const [currentCode, setCurrentCode] = useState("")
 
     const history= useHistory();
@@ -70,42 +72,95 @@ function EditorPage() {
             .then((response) => response.json())
             .then((response) => {
                 setUser(response);
-                if (user.exercises) {
-                    setCurrentCode(user.exercises[id].defaultCode)
-                }
+                if (user.exercises)
+                    {
+                        switch (language) {
+                            case "python":
+                                setCurrentCode(user.exercises[id].python.defaultCode)
+                                break;
+                            case "javascript":
+                                setCurrentCode(user.exercises[id].javascript.defaultCode)
+                                    break;
+                        
+                            default:
+                                break;
+                        }
+                    }
             });
-    },[id])
+    },[id,language])
+
+    const handleChange = (e) => {
+        setLanguage(e.target.value)
+        console.log("new language", e.target.value)
+        console.log("new code", currentCode)
+
+    }
 
 
     const runCode = () => {
 
         let newUser = user
-        newUser.exercises[id].defaultCode = currentCode
-        fetch(process.env.REACT_APP_BACKEND_URL+"/api/code/submit",
-            {
-                method: "POST",
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                    'Authorization': `Bearer ${localStorage.getItem("token")}`
-                },
-                body: JSON.stringify({
-                    'user': newUser,
-                    'id': id,
-                })
-            }).then((res) => res.json())
-            .then((res) => {
-                if(res.err) return alert("Vous avez oublié la signature de la fonction")
-                const output= res.output
-                const tableOutput = output.split(/\r\n|\r|\n/)
-                setOutPut(tableOutput)
-                setIsSucceed(res.isSucceed)
-                openModal();
-            })
+        switch (language) {
+            case "python":
+                newUser.exercises[id].python.defaultCode = currentCode
+                fetch("http://localhost:8000/api/code/submit",
+                    {
+                        method: "POST",
+                        headers: {
+                            Accept: "application/json",
+                            "Content-Type": "application/json",
+                            'Authorization': `Bearer ${localStorage.getItem("token")}`
+                        },
+                        body: JSON.stringify({
+                            'user': newUser,
+                            'id': id,
+                            'language' : language
+                        })
+                    }).then((res) => res.json())
+                    .then((res) => {
+                        if(res.err) return alert("Vous avez oublié la signature de la fonction")
+                        const output= res.output
+                        const tableOutput = output.split(/\r\n|\r|\n/)
+                        setOutPut(tableOutput)
+                        setIsSucceed(res.isSucceed)
+                        openModal();
+                        console.log("voici ma reponse>>>>>", res)
+                    })
+                break;
+            case "javascript":
+                newUser.exercises[id].javascript.defaultCode = currentCode
+                fetch("http://localhost:8000/api/code/submit",
+                    {
+                        method: "POST",
+                        headers: {
+                            Accept: "application/json",
+                            "Content-Type": "application/json",
+                            'Authorization': `Bearer ${localStorage.getItem("token")}`
+                        },
+                        body: JSON.stringify({
+                            'user': newUser,
+                            'id': id,
+                            'language' : language
+                        })
+                    }).then((res) => res.json())
+                    .then((res) => {
+                        if(res.err) return alert("Vous avez oublié la signature de la fonction")
+                        const output= res.output
+                        console.log(output)
+                        //const tableOutput = output.split(/\r\n|\r|\n/)
+                        setOutPut(output)
+                        setIsSucceed(res.isSucceed)
+                        openModal();
+                    })
+                break;
+            default:
+                break;
+        }
     }
 
     const handleEditorChange = (value, event) => {
         setCurrentCode(value)
+        console.log(value)
     }
     return (
         <div className="editorBlock" style={{height: "100%"}}>
@@ -128,13 +183,17 @@ function EditorPage() {
                 </div>    
             </div>
             <div className="rightBlock">
+                <select value={language} onChange={handleChange}>
+                    <option selected value="python">python</option>
+                    <option value="javascript">javascript</option>
+                </select>
                 {user.exercises && (
                      <Editor
                         height="80vh"
                         width="130vh"
                         theme="vs-dark"
-                        defaultLanguage="python"
-                        defaultValue={user.exercises[id].defaultCode}
+                        defaultLanguage={language}
+                        defaultValue={currentCode}
                         onChange={handleEditorChange}
                     />
                 )}
