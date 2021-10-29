@@ -28,7 +28,6 @@ function EditorPage() {
     }
   
     function afterOpenModal() {
-      // references are now sync'd and can be accessed.
     }
   
     function closeModal() {
@@ -103,7 +102,7 @@ function EditorPage() {
         switch (language) {
             case "python":
                 newUser.exercises[id].python.defaultCode = currentCode
-                fetch("http://localhost:8000/api/code/submit",
+                fetch(process.env.REACT_APP_BACKEND_URL+"/api/code/submit",
                     {
                         method: "POST",
                         headers: {
@@ -129,7 +128,7 @@ function EditorPage() {
                 break;
             case "javascript":
                 newUser.exercises[id].javascript.defaultCode = currentCode
-                fetch("http://localhost:8000/api/code/submit",
+                fetch(process.env.REACT_APP_BACKEND_URL+"/api/code/submit",
                     {
                         method: "POST",
                         headers: {
